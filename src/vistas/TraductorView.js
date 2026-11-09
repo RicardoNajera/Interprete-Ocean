@@ -282,15 +282,16 @@ const moduloAnimacionesYEstilos = {
         color: rgba(79, 195, 232, 0.95);
       }
 
-      /* Firma del autor: serif editorial compacta */
+      /* Firma del autor: serif editorial con presencia */
       .credito-autor {
         font-family: var(--font-display);
-        font-size: 10.5px;
-        font-weight: 600;
+        font-size: 14px;
+        font-weight: 700;
         font-style: normal;
         letter-spacing: 0.05em;
         text-transform: none;
-        color: rgba(251, 249, 245, 0.8);
+        color: #FBF9F5;
+        text-shadow: 0 1px 7px rgba(0, 0, 0, 0.55);
         white-space: nowrap;
         line-height: 1;
       }
@@ -362,12 +363,12 @@ const moduloPlantillasInterfaz = {
         <div class="flex flex-col items-center justify-center w-full relative">
 
           <!-- Bloque de marca centrado: logo completo + Intérprete -->
-          <div class="flex items-center justify-center gap-2.5 w-full">
-            <img src="assets/logo-ocean-mark-white.svg" alt="Ocean Allure Costa Mujeres" class="w-[42px] h-[42px] shrink-0 drop-shadow-lg" />
+          <div class="flex items-center justify-center gap-3 w-full">
+            <img src="assets/logo-ocean-mark-white.svg" alt="Ocean Allure Costa Mujeres" class="w-[52px] h-[52px] shrink-0 drop-shadow-lg" />
             <div class="flex flex-col items-center">
               <h1 class="marca-titulo text-[17px] leading-none tracking-[0.18em] uppercase text-center pl-[0.18em]">Ocean Allure</h1>
-              <span class="marca-sub mt-[4px] text-[7.5px] tracking-[0.34em] text-center pl-[0.34em]">Costa Mujeres</span>
-              <div class="flex items-center gap-2 mt-[5px] pl-[0.3em]">
+              <span class="marca-sub mt-[5px] text-[7.5px] tracking-[0.34em] text-center pl-[0.34em]">Costa Mujeres</span>
+              <div class="flex items-center gap-2 mt-[7px] pl-[0.3em]">
                 <span class="h-[1px] w-4 bg-[#4FC3E8]/45"></span>
                 <span class="text-[10px] font-semibold tracking-[0.3em] uppercase text-[#4FC3E8] drop-shadow-sm">Intérprete</span>
                 <span class="h-[1px] w-4 bg-[#4FC3E8]/45"></span>
@@ -376,8 +377,8 @@ const moduloPlantillasInterfaz = {
           </div>
 
           <!-- Firma del autor, bajo la marca y alineada a la derecha -->
-          <div class="flex items-center justify-end gap-1.5 w-full mt-[3px]">
-            <span class="h-[1px] w-3.5 bg-gradient-to-r from-transparent to-[#4FC3E8]/45"></span>
+          <div class="flex items-center justify-end gap-1.5 w-full mt-[2px]">
+            <span class="h-[1px] w-4 bg-gradient-to-r from-transparent to-[#4FC3E8]/50"></span>
             <span class="credito-autor">By Ricardo Nájera</span>
           </div>
 
