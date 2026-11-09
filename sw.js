@@ -1,5 +1,5 @@
 /* Service Worker - Interprete Ocean Allure: app instalable y offline */
-const CACHE = 'ocean-interprete-v4';
+const CACHE = 'ocean-interprete-v5';
 const ACTIVOS = [
   './', './index.html', './estilos.css', './manifest.json', './sw.js',
   './src/app.js',
@@ -35,6 +35,13 @@ self.addEventListener('fetch', (e) => {
 
   const url = new URL(req.url);
   const esDocumento = req.mode === 'navigate' || /\.(html|js|css|json)$/.test(url.pathname);
+  const esForzado = url.searchParams.has('v');
+
+  // Si viene con ?v= (actualización forzada), se ignora la caché por completo.
+  if (esForzado) {
+    e.respondWith(fetch(req).catch(() => caches.match('./index.html')));
+    return;
+  }
 
   // Red primero para HTML/JS/CSS: así una nueva versión se ve al instante.
   if (esDocumento) {

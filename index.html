@@ -107,17 +107,19 @@
     (function () {
       // 1) Registro del service worker (habilita instalación y modo offline)
       if ('serviceWorker' in navigator) {
+        var VERSION_APP = 'v5';           // ← súbelo en cada deploy
+        var CLAVE_VERSION = 'ocean-version';
+
         window.addEventListener('load', function () {
-          navigator.serviceWorker.register('sw.js').then(function (reg) {
-            // Fuerza la búsqueda de una versión nueva del SW en cada arranque.
+          navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(function (reg) {
+            // Busca siempre una versión nueva, ignorando la caché HTTP.
             reg.update();
-            // Si hay un SW nuevo esperando, se activa de inmediato.
+
             reg.addEventListener('updatefound', function () {
               var nuevo = reg.installing;
               if (!nuevo) return;
               nuevo.addEventListener('statechange', function () {
                 if (nuevo.state === 'installed' && navigator.serviceWorker.controller) {
-                  // Recarga una sola vez para estrenar la versión nueva.
                   if (!sessionStorage.getItem('ocean-recarga-sw')) {
                     sessionStorage.setItem('ocean-recarga-sw', 'si');
                     location.reload();
@@ -127,6 +129,36 @@
             });
           }).catch(function () {});
         });
+
+        // Cuando el SW nuevo toma el control, se borra todo lo viejo y se recarga.
+        navigator.serviceWorker.addEventListener('controllerchange', function () {
+          if (!sessionStorage.getItem('ocean-recarga-sw')) {
+            sessionStorage.setItem('ocean-recarga-sw', 'si');
+            location.reload();
+          }
+        });
+
+        // ¿Cambió la versión desplegada? Se limpia caché y se fuerza la nueva.
+        if (localStorage.getItem(CLAVE_VERSION) !== VERSION_APP) {
+          localStorage.setItem(CLAVE_VERSION, VERSION_APP);
+          Promise.resolve()
+            .then(function () { return caches.keys(); })
+            .then(function (ks) { return Promise.all(ks.map(function (k) { return caches.delete(k); })); })
+            .then(function () {
+              return navigator.serviceWorker.getRegistrations();
+            })
+            .then(function (regs) {
+              return Promise.all(regs.map(function (r) { return r.unregister(); }));
+            })
+            .then(function () {
+              // Recarga una sola vez para estrenar todo limpio.
+              if (!sessionStorage.getItem('ocean-limpieza-' + VERSION_APP)) {
+                sessionStorage.setItem('ocean-limpieza-' + VERSION_APP, 'si');
+                location.reload();
+              }
+            })
+            .catch(function () {});
+        }
       }
 
       // 2) Si la app YA corre instalada (standalone), se marca y no se muestra nada.
@@ -233,6 +265,60 @@
           if (promptDiferido) return; // ya hay prompt nativo disponible
           mostrarVeloInstalar();
         }, 1200);
+      });
+
+      // 8) FORZAR ACTUALIZACIÓN: toca el logo 5 veces seguidas.
+      //    Borra caché + service worker y recarga limpio. Sin salir del navegador.
+      var toquesLogo = 0;
+      var temporizadorLogo = null;
+
+      window.forzarActualizacion = function () {
+        try {
+          sessionStorage.clear();
+          localStorage.removeItem('ocean-version');
+          localStorage.removeItem('ocean-instalar-omitido');
+        } catch (e) {}
+
+        var aviso = document.createElement('div');
+        aviso.textContent = 'Actualizando…';
+        aviso.style.cssText =
+          'position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;' +
+          'background:rgba(3,15,24,0.96);color:#4FC3E8;font:700 13px/1 Inter,sans-serif;' +
+          'letter-spacing:0.2em;text-transform:uppercase;';
+        document.body.appendChild(aviso);
+
+        Promise.resolve()
+          .then(function () { return window.caches ? caches.keys() : []; })
+          .then(function (ks) { return Promise.all(ks.map(function (k) { return caches.delete(k); })); })
+          .then(function () {
+            return navigator.serviceWorker ? navigator.serviceWorker.getRegistrations() : [];
+          })
+          .then(function (regs) {
+            return Promise.all(regs.map(function (r) { return r.unregister(); }));
+          })
+          .then(function () {
+            // Recarga con parámetro único: salta toda caché del navegador.
+            var base = location.origin + location.pathname;
+            location.replace(base + '?v=' + Date.now());
+          })
+          .catch(function () {
+            location.replace(location.origin + location.pathname + '?v=' + Date.now());
+          });
+      };
+
+      document.addEventListener('click', function (ev) {
+        if (!ev.target.closest) return;
+        // Se activa tocando el logo de la cabecera (o el del aviso de instalación).
+        if (!ev.target.closest('header img') && !ev.target.closest('#velo-instalar img')) return;
+
+        toquesLogo++;
+        clearTimeout(temporizadorLogo);
+        temporizadorLogo = setTimeout(function () { toquesLogo = 0; }, 2000);
+
+        if (toquesLogo >= 5) {
+          toquesLogo = 0;
+          window.forzarActualizacion();
+        }
       });
 
   </script>
