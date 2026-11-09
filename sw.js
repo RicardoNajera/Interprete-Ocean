@@ -1,5 +1,5 @@
 /* Service Worker - Interprete Ocean Allure: app instalable y offline */
-const CACHE = 'ocean-interprete-v1';
+const CACHE = 'ocean-interprete-v3';
 const ACTIVOS = [
   './', './index.html', './estilos.css', './manifest.json', './sw.js',
   './src/app.js',
@@ -32,6 +32,23 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   // Solo cachea el propio origen; las llamadas a APIs van siempre a red.
   if (new URL(req.url).origin !== self.location.origin) return;
+
+  const url = new URL(req.url);
+  const esDocumento = req.mode === 'navigate' || /\.(html|js|css|json)$/.test(url.pathname);
+
+  // Red primero para HTML/JS/CSS: así una nueva versión se ve al instante.
+  if (esDocumento) {
+    e.respondWith(
+      fetch(req).then((res) => {
+        const copia = res.clone();
+        caches.open(CACHE).then((c) => c.put(req, copia)).catch(() => {});
+        return res;
+      }).catch(() => caches.match(req).then((hit) => hit || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  // Recursos estáticos (logos, íconos): caché primero.
   e.respondWith(
     caches.match(req).then((hit) => hit || fetch(req).then((res) => {
       const copia = res.clone();

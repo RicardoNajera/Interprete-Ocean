@@ -296,6 +296,12 @@ const moduloAnimacionesYEstilos = {
         line-height: 1;
       }
 
+      /* Fila de la firma: centrado propio, sin depender de Tailwind */
+      .firma-fila {
+        display: flex; align-items: center; justify-content: center;
+        gap: 8px; margin-top: 6px; width: 100%;
+      }
+
       /* Líneas ornamentales a ambos lados de la firma */
       .linea-firma {
         height: 1px; width: 22px; flex: 0 0 auto;
@@ -303,59 +309,6 @@ const moduloAnimacionesYEstilos = {
         box-shadow: 0 0 5px rgba(79, 195, 232, 0.45);
       }
       .linea-firma:last-child { transform: scaleX(-1); }
-
-      /* ----------------------------------------------------------------
-         Aviso de instalación (primera visita)
-         ---------------------------------------------------------------- */
-      .velo-instalar {
-        position: fixed; inset: 0; z-index: 90;
-        display: none; align-items: center; justify-content: center;
-        padding: 24px;
-        background: radial-gradient(circle at 50% 40%, rgba(5, 79, 124, 0.55), rgba(3, 15, 24, 0.88) 70%);
-        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      }
-      .velo-instalar.visible { display: flex; animation: aparecer-velo 0.32s ease-out both; }
-
-      @keyframes aparecer-velo { from { opacity: 0; } to { opacity: 1; } }
-      @keyframes subir-tarjeta {
-        from { opacity: 0; transform: translateY(14px) scale(0.97); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
-      }
-
-      .tarjeta-instalar {
-        width: 100%; max-width: 320px; text-align: center;
-        padding: 26px 22px 22px;
-        border-radius: 20px;
-        background: linear-gradient(180deg, rgba(10, 42, 62, 0.96), rgba(4, 22, 34, 0.98));
-        border: 1px solid rgba(79, 195, 232, 0.28);
-        box-shadow: 0 22px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        animation: subir-tarjeta 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
-      }
-
-      .boton-instalar {
-        width: 100%; padding: 13px 18px;
-        border-radius: 12px; border: none;
-        font-family: var(--font-ui); font-size: 12px; font-weight: 800;
-        letter-spacing: 0.16em; text-transform: uppercase;
-        color: #03202E; cursor: pointer;
-        background: linear-gradient(135deg, #4FC3E8 0%, #0184B8 100%);
-        box-shadow: 0 8px 22px rgba(1, 132, 184, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-        transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
-      }
-      .boton-instalar:hover { filter: brightness(1.08); box-shadow: 0 10px 28px rgba(1, 132, 184, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.5); }
-      .boton-instalar:active { transform: scale(0.975); }
-
-      .boton-omitir {
-        margin-top: 12px; width: 100%; background: none; border: none;
-        font-family: var(--font-ui); font-size: 9.5px; font-weight: 600;
-        letter-spacing: 0.2em; text-transform: uppercase;
-        color: rgba(251, 249, 245, 0.45); cursor: pointer;
-        padding: 6px; transition: color 0.16s ease;
-      }
-      .boton-omitir:hover { color: rgba(251, 249, 245, 0.8); }
-
-      /* Si la app ya está instalada, el aviso nunca se muestra */
-      [data-app-instalada="si"] .velo-instalar { display: none !important; }
 
       .indicador-turno {
         display: inline-flex; align-items: center; gap: 5px;
@@ -419,19 +372,7 @@ const moduloPlantillasInterfaz = {
       <div class="orbe-ambiente -bottom-24 -right-20 w-[75vw] h-[75vw] max-w-[440px] max-h-[440px] bg-[#054F7C]/40 blur-[52px]" style="animation: animacion-orbe-flotante 19s infinite alternate-reverse ease-in-out;"></div>
       <div class="orbe-ambiente top-1/2 left-1/3 w-[50vw] h-[50vw] max-w-[320px] max-h-[320px] bg-[#4FC3E8]/10 blur-[60px] pointer-events-none"></div>
 
-      <!-- AVISO DE INSTALACIÓN · solo primera visita -->
-      <div id="velo-instalar" class="velo-instalar" data-instalar-app>
-        <div class="tarjeta-instalar">
-          <img src="assets/logo-ocean-mark-white.svg" alt="" class="w-[48px] h-[48px] mx-auto mb-3 drop-shadow-lg" />
-          <h2 class="marca-titulo text-[15px] tracking-[0.16em] mb-1">Ocean Allure</h2>
-          <p class="marca-sub mb-4">Costa Mujeres</p>
-          <p class="text-[11.5px] leading-relaxed text-white/70 mb-5 px-1">
-            Instala el intérprete en tu dispositivo para abrirlo directo desde tu pantalla de inicio.
-          </p>
-          <button id="btn-instalar-app" class="boton-instalar" type="button">Instalar</button>
-          <button id="btn-omitir-instalar" class="boton-omitir" type="button">Ahora no</button>
-        </div>
-      </div>
+      <!-- AVISO DE INSTALACIÓN · se inyecta desde index.html para estar en todas las vistas -->
 
 
       <!-- CABECERA: identidad Ocean Allure -->
@@ -451,7 +392,7 @@ const moduloPlantillasInterfaz = {
               </div>
 
               <!-- Firma del autor: exactamente centrada bajo Intérprete -->
-              <div class="flex items-center justify-center gap-2 mt-[6px]">
+              <div class="firma-fila">
                 <span class="linea-firma"></span>
                 <span class="credito-autor">By Ricardo Nájera</span>
                 <span class="linea-firma"></span>

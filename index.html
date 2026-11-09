@@ -27,6 +27,79 @@
     <!-- Contenedor móvil centrado en pantallas grandes -->
     <div id="mobile-container" class="w-full max-w-md h-full relative overflow-hidden flex flex-col"></div>
   </div>
+
+  <!-- AVISO DE INSTALACIÓN · estilos autónomos, no dependen de Tailwind ni de la vista -->
+  <style>
+    .velo-instalar {
+      position: fixed; inset: 0; z-index: 9999;
+      display: none; align-items: center; justify-content: center; padding: 24px;
+      background: radial-gradient(circle at 50% 40%, rgba(5, 79, 124, 0.55), rgba(3, 15, 24, 0.9) 70%);
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .velo-instalar.visible { display: flex; }
+    .velo-instalar .caja {
+      width: 100%; max-width: 320px; text-align: center; padding: 26px 22px 22px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(10, 42, 62, 0.98), rgba(4, 22, 34, 0.99));
+      border: 1px solid rgba(79, 195, 232, 0.28);
+      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      animation: subirCaja 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    @keyframes subirCaja {
+      from { opacity: 0; transform: translateY(14px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .velo-instalar img.logo {
+      width: 48px; height: 48px; margin: 0 auto 12px; display: block;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+    }
+    .velo-instalar h2 {
+      font-family: 'Cormorant Garamond', Didot, serif;
+      font-size: 15px; font-weight: 400; letter-spacing: 0.16em;
+      text-transform: uppercase; line-height: 1; color: #FBF9F5; margin: 0 0 6px;
+    }
+    .velo-instalar .sub {
+      font-size: 7.5px; font-weight: 600; letter-spacing: 0.34em;
+      text-transform: uppercase; color: rgba(79, 195, 232, 0.95);
+      margin: 0 0 16px; padding-left: 0.34em;
+    }
+    .velo-instalar p.txt {
+      font-size: 11.5px; line-height: 1.65; color: rgba(251, 249, 245, 0.72);
+      margin: 0 0 20px; padding: 0 2px; font-weight: 400;
+    }
+    .velo-instalar p.txt strong { color: #FBF9F5; font-weight: 700; }
+    .velo-instalar button.principal {
+      width: 100%; padding: 13px 18px; border-radius: 12px; border: none;
+      font-size: 12px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
+      color: #03202E; cursor: pointer;
+      background: linear-gradient(135deg, #4FC3E8 0%, #0184B8 100%);
+      box-shadow: 0 8px 22px rgba(1, 132, 184, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      font-family: inherit;
+    }
+    .velo-instalar button.principal:active { transform: scale(0.975); }
+    .velo-instalar button.secundario {
+      margin-top: 12px; width: 100%; background: none; border: none;
+      font-size: 9.5px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(251, 249, 245, 0.45); cursor: pointer; padding: 6px; font-family: inherit;
+    }
+    .velo-instalar button.secundario:hover { color: rgba(251, 249, 245, 0.8); }
+    [data-app-instalada="si"] .velo-instalar { display: none !important; }
+  </style>
+
+  <div id="velo-instalar" class="velo-instalar" data-instalar-app>
+    <div class="caja">
+      <img src="assets/logo-ocean-mark-white.svg" alt="" class="logo" />
+      <h2>Ocean Allure</h2>
+      <p class="sub">Costa Mujeres</p>
+      <p class="txt">
+        Instala el intérprete en tu dispositivo para abrirlo directo desde tu pantalla de inicio.
+      </p>
+      <button id="btn-instalar-app" class="principal" type="button">Instalar</button>
+      <button id="btn-omitir-instalar" class="secundario" type="button">Ahora no</button>
+    </div>
+  </div>
+
   <script type="module" src="src/app.js"></script>
   <script>
     /* PWA: registro del service worker + control del aviso de instalación */
@@ -34,7 +107,24 @@
       // 1) Registro del service worker (habilita instalación y modo offline)
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {
-          navigator.serviceWorker.register('sw.js').catch(function () {});
+          navigator.serviceWorker.register('sw.js').then(function (reg) {
+            // Fuerza la búsqueda de una versión nueva del SW en cada arranque.
+            reg.update();
+            // Si hay un SW nuevo esperando, se activa de inmediato.
+            reg.addEventListener('updatefound', function () {
+              var nuevo = reg.installing;
+              if (!nuevo) return;
+              nuevo.addEventListener('statechange', function () {
+                if (nuevo.state === 'installed' && navigator.serviceWorker.controller) {
+                  // Recarga una sola vez para estrenar la versión nueva.
+                  if (!sessionStorage.getItem('ocean-recarga-sw')) {
+                    sessionStorage.setItem('ocean-recarga-sw', 'si');
+                    location.reload();
+                  }
+                }
+              });
+            });
+          }).catch(function () {});
         });
       }
 
@@ -116,16 +206,16 @@
             }).catch(function () { cerrarVeloInstalar(); });
           } else {
             // Navegadores sin beforeinstallprompt (iOS/Safari): instrucciones.
-            var tarjeta = document.querySelector('.tarjeta-instalar');
+            var tarjeta = document.querySelector('#velo-instalar .caja');
             if (tarjeta) {
               tarjeta.innerHTML =
-                '<img src="assets/logo-ocean-mark-white.svg" alt="" class="w-[48px] h-[48px] mx-auto mb-3 drop-shadow-lg" />' +
-                '<h2 class="marca-titulo text-[15px] tracking-[0.16em] mb-3">Instalar</h2>' +
-                '<p class="text-[11.5px] leading-relaxed text-white/75 mb-4">' +
+                '<img src="assets/logo-ocean-mark-white.svg" alt="" class="logo" />' +
+                '<h2>Instalar</h2>' +
+                '<p class="txt">' +
                   'En iPhone/iPad: toca <strong>Compartir</strong> y elige <strong>Añadir a pantalla de inicio</strong>.<br><br>' +
                   'En Android/Chrome: abre el menú <strong>⋮</strong> y elige <strong>Instalar aplicación</strong>.' +
                 '</p>' +
-                '<button id="btn-omitir-instalar" class="boton-omitir" type="button" style="margin-top:0">Entendido</button>';
+                '<button id="btn-omitir-instalar" class="secundario" type="button" style="margin-top:0">Entendido</button>';
             }
           }
         }
