@@ -1,0 +1,5 @@
+.DS_Store
+__*.html
+*.bak
+diag.js
+node_modules/

@@ -1,0 +1,419 @@
+/* ==========================================================================
+   OCEAN ALLURE COSTA MUJERES · INTERPRETE
+   Sistema de diseño — inspirado en la identidad de Ocean Signature Resorts
+   Paleta oficial:  #054F7C (Ocean Deep)  ·  #0184B8 (Turquoise)
+   Tipografía: serif editorial para títulos · sans geométrica para operación
+   ========================================================================== */
+
+:root {
+  /* Marca */
+  --ocean-deep: #054F7C;
+  --ocean-mid: #0184B8;
+  --ocean-light: #4FC3E8;
+  --ocean-glow: rgba(1, 132, 184, 0.45);
+
+  /* Neutros cálidos de resort */
+  --sand-50: #FBF9F5;
+  --sand-100: #F5EFE4;
+  --sand-200: #E7DCC9;
+  --sand-300: #CDBFA6;
+
+  /* Superficies */
+  --ink-900: #030F18;
+  --ink-800: #051824;
+  --ink-700: #082435;
+  --ink-600: #0B3047;
+
+  /* Semánticos */
+  --ok: #10B981;
+  --warn: #F59E0B;
+  --danger: #EF4444;
+
+  /* Radios y sombras */
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 26px;
+  --r-xl: 34px;
+  --shadow-soft: 0 18px 45px -18px rgba(0, 0, 0, 0.55);
+  --shadow-lift: 0 26px 60px -22px rgba(0, 0, 0, 0.65);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.12);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+
+  /* Tipografía */
+  --font-display: 'Cormorant Garamond', 'Playfair Display', 'Didot', 'Times New Roman', serif;
+  --font-ui: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-ui);
+  background: var(--ink-900);
+}
+
+
+/* --------------------------------------------------------------------------
+   Fondo del resort: malla de luz sobre marea nocturna
+   -------------------------------------------------------------------------- */
+.fondo-operaciones {
+  position: relative;
+  background:
+    radial-gradient(ellipse 120% 70% at 50% -10%, rgba(1, 132, 184, 0.28) 0%, transparent 60%),
+    radial-gradient(ellipse 90% 60% at 100% 100%, rgba(5, 79, 124, 0.35) 0%, transparent 65%),
+    linear-gradient(178deg, #051824 0%, #030F18 55%, #02090F 100%);
+}
+
+/* Rejilla fina tipo plano náutico */
+.fondo-operaciones::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(79, 195, 232, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 195, 232, 0.055) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 85%);
+}
+
+/* Halo de arena en la base */
+.fondo-operaciones::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34%;
+  pointer-events: none;
+  background: linear-gradient(0deg, rgba(1, 132, 184, 0.09) 0%, transparent 100%);
+}
+
+/* --------------------------------------------------------------------------
+   Superficies de cristal
+   -------------------------------------------------------------------------- */
+.panel-cristal {
+  position: relative;
+  background: linear-gradient(160deg, rgba(11, 48, 71, 0.72) 0%, rgba(5, 24, 36, 0.88) 100%);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  border: var(--glass-border);
+  box-shadow: var(--glass-highlight), var(--shadow-soft);
+}
+
+.panel-cristal-suave {
+  background: rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Filo de luz superior estilo lámina de agua */
+.borde-agua::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(79, 195, 232, 0.75), transparent);
+
+/* --------------------------------------------------------------------------
+   Tipografía editorial
+   -------------------------------------------------------------------------- */
+.titulo-marca {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--sand-50);
+}
+
+.subtitulo-marca {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 8.5px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--ocean-light);
+}
+
+.etiqueta-seccion {
+  font-family: var(--font-ui);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(231, 220, 201, 0.55);
+}
+
+.etiqueta-seccion::after {
+  content: '';
+  display: block;
+  width: 26px;
+  height: 1px;
+  margin-top: 8px;
+  background: linear-gradient(90deg, var(--ocean-mid), transparent);
+}
+
+.numero-display {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* --------------------------------------------------------------------------
+   Tarjetas interactivas
+   -------------------------------------------------------------------------- */
+.tarjeta-oficio {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.22s ease,
+              border-color 0.22s ease;
+}
+
+.tarjeta-oficio::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(79, 195, 232, 0.22) 0%, transparent 70%);
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .tarjeta-oficio:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift);
+    border-color: rgba(79, 195, 232, 0.4);
+  }
+  .tarjeta-oficio:hover::after { opacity: 1; }
+}
+
+.tarjeta-oficio:active {
+  transform: scale(0.965);
+}
+
+/* --------------------------------------------------------------------------
+   Botones
+   -------------------------------------------------------------------------- */
+.btn-primario {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, var(--ocean-mid) 0%, var(--ocean-deep) 100%);
+  border: 1px solid rgba(79, 195, 232, 0.45);
+  box-shadow: 0 10px 26px -12px var(--ocean-glow), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+}
+
+.btn-primario:active {
+  transform: scale(0.97);
+  filter: brightness(1.12);
+}
+
+.btn-fantasma {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--sand-100);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.16s ease;
+}
+
+.btn-fantasma:hover {
+  background: rgba(79, 195, 232, 0.12);
+  border-color: rgba(79, 195, 232, 0.38);
+}
+
+.btn-fantasma:active { transform: scale(0.97); }
+
+
+/* --------------------------------------------------------------------------
+   Consola / bitácora técnica
+   -------------------------------------------------------------------------- */
+.panel-consola {
+  position: relative;
+  font-family: var(--font-mono);
+  background: linear-gradient(180deg, rgba(2, 9, 15, 0.92) 0%, rgba(2, 16, 26, 0.96) 100%);
+  border: 1px solid rgba(79, 195, 232, 0.18);
+  box-shadow: inset 0 0 40px rgba(1, 132, 184, 0.08);
+}
+
+.panel-consola::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.018) 0px,
+    rgba(255, 255, 255, 0.018) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+.consola-linea { animation: aparecer-linea 0.28s ease both; }
+
+/* --------------------------------------------------------------------------
+   Indicadores de estado
+   -------------------------------------------------------------------------- */
+.punto-activo {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ok);
+  animation: latido-punto 2.4s ease-out infinite;
+}
+
+.pastilla-dato {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(231, 220, 201, 0.82);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --------------------------------------------------------------------------
+   Divisor decorativo (motivo ola)
+   -------------------------------------------------------------------------- */
+.divisor-ola {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(79, 195, 232, 0.4), transparent);
+}
+
+/* --------------------------------------------------------------------------
+   Barra de progreso de turno
+   -------------------------------------------------------------------------- */
+.barra-turno {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.barra-turno > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--ocean-mid), var(--ocean-light));
+  box-shadow: 0 0 12px var(--ocean-glow);
+}
+
+/* --------------------------------------------------------------------------
+   Animaciones
+   -------------------------------------------------------------------------- */
+@keyframes slideUp {
+  0% { opacity: 0; transform: translateY(18px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes aparecer-linea {
+  0% { opacity: 0; transform: translateX(-6px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes latido-punto {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55); }
+  70% { box-shadow: 0 0 0 7px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+@keyframes flotar-suave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes brillo-deslizante {
+  0% { transform: translateX(-140%); }
+  100% { transform: translateX(260%); }
+}
+
+.anim-entrar { animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.flotar { animation: flotar-suave 6s ease-in-out infinite; }
+
+/* Reflejo que recorre el logo */
+.logo-reflejo {
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-reflejo::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 42%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: brillo-deslizante 4.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Utilidades
+   -------------------------------------------------------------------------- */
+.brillo-borde {
+  box-shadow: 0 0 0 1px rgba(79, 195, 232, 0.18), 0 14px 36px -18px rgba(0, 0, 0, 0.7);
+}
+
+.scrollbar-oculto { scrollbar-width: none; -ms-overflow-style: none; }
+.scrollbar-oculto::-webkit-scrollbar { display: none; }
+
+::-webkit-scrollbar { width: 0px; height: 0px; background: transparent; }
+
+/* --------------------------------------------------------------------------
+   Escritorio: el contenedor móvil se siente como un dispositivo real
+   -------------------------------------------------------------------------- */
+@media (min-width: 640px) {
+  #mobile-container {
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 40px 120px -30px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(79, 195, 232, 0.08);
+  }
+  #app-root {
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(1, 132, 184, 0.14) 0%, transparent 60%),
+      #02090F;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Accesibilidad: respeta preferencia de movimiento reducido
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .anim-entrar,
+  .flotar,
+  .consola-linea,
+  .punto-activo,
+  .logo-reflejo::after {
+    animation: none !important;
+  }
+  .tarjeta-oficio { transition: none; }
+}
+
+}
