@@ -102,7 +102,7 @@ const moduloAnimacionesYEstilos = {
         --sab: env(safe-area-inset-bottom, 0px);
         --sal: env(safe-area-inset-left, 0px);
         --sar: env(safe-area-inset-right, 0px);
-        --header-h: calc(var(--sat) + 128px);
+        --header-h: calc(var(--sat) + 94px);
         --footer-h: calc(var(--sab) + 116px);
         --agua: #0184B8;
         --agua-clara: #4FC3E8;
@@ -282,16 +282,15 @@ const moduloAnimacionesYEstilos = {
         color: rgba(79, 195, 232, 0.95);
       }
 
-      /* Firma del autor: serif editorial con presencia */
+      /* Firma del autor: serif editorial compacta */
       .credito-autor {
         font-family: var(--font-display);
-        font-size: 13px;
+        font-size: 10.5px;
         font-weight: 600;
         font-style: normal;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.05em;
         text-transform: none;
-        color: #FBF9F5;
-        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+        color: rgba(251, 249, 245, 0.8);
         white-space: nowrap;
         line-height: 1;
       }
@@ -363,12 +362,12 @@ const moduloPlantillasInterfaz = {
         <div class="flex flex-col items-center justify-center w-full relative">
 
           <!-- Bloque de marca centrado: logo completo + Intérprete -->
-          <div class="flex items-center justify-center gap-3 w-full">
-            <img src="assets/logo-ocean-mark-white.svg" alt="Ocean Allure Costa Mujeres" class="w-[52px] h-[52px] shrink-0 drop-shadow-lg" />
+          <div class="flex items-center justify-center gap-2.5 w-full">
+            <img src="assets/logo-ocean-mark-white.svg" alt="Ocean Allure Costa Mujeres" class="w-[42px] h-[42px] shrink-0 drop-shadow-lg" />
             <div class="flex flex-col items-center">
               <h1 class="marca-titulo text-[17px] leading-none tracking-[0.18em] uppercase text-center pl-[0.18em]">Ocean Allure</h1>
-              <span class="marca-sub mt-[5px] text-[7.5px] tracking-[0.34em] text-center pl-[0.34em]">Costa Mujeres</span>
-              <div class="flex items-center gap-2 mt-[7px] pl-[0.3em]">
+              <span class="marca-sub mt-[4px] text-[7.5px] tracking-[0.34em] text-center pl-[0.34em]">Costa Mujeres</span>
+              <div class="flex items-center gap-2 mt-[5px] pl-[0.3em]">
                 <span class="h-[1px] w-4 bg-[#4FC3E8]/45"></span>
                 <span class="text-[10px] font-semibold tracking-[0.3em] uppercase text-[#4FC3E8] drop-shadow-sm">Intérprete</span>
                 <span class="h-[1px] w-4 bg-[#4FC3E8]/45"></span>
@@ -377,8 +376,8 @@ const moduloPlantillasInterfaz = {
           </div>
 
           <!-- Firma del autor, bajo la marca y alineada a la derecha -->
-          <div class="flex items-center justify-end gap-1.5 w-full mt-2">
-            <span class="h-[1px] w-4 bg-gradient-to-r from-transparent to-[#4FC3E8]/45"></span>
+          <div class="flex items-center justify-end gap-1.5 w-full mt-[3px]">
+            <span class="h-[1px] w-3.5 bg-gradient-to-r from-transparent to-[#4FC3E8]/45"></span>
             <span class="credito-autor">By Ricardo Nájera</span>
           </div>
 
