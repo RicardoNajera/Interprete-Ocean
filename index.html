@@ -75,6 +75,75 @@
         marcarInstalada();
       };
     })();
+
+      // 6) Aviso central de instalación: aparece solo la primera vez.
+      var promptDiferido = null;
+
+      function mostrarVeloInstalar() {
+        var velo = document.getElementById('velo-instalar');
+        if (!velo || document.documentElement.getAttribute('data-app-instalada') === 'si') return;
+        if (localStorage.getItem('ocean-instalar-omitido') === 'si') return;
+        velo.classList.add('visible');
+      }
+
+      function cerrarVeloInstalar() {
+        var velo = document.getElementById('velo-instalar');
+        if (velo) velo.classList.remove('visible');
+      }
+
+      window.addEventListener('beforeinstallprompt', function (ev) {
+        ev.preventDefault();
+        promptDiferido = ev;
+        mostrarVeloInstalar();
+      });
+
+      document.addEventListener('click', function (ev) {
+        if (!ev.target.closest) return;
+        var btn = ev.target.closest('#btn-instalar-app');
+        var omitir = ev.target.closest('#btn-omitir-instalar');
+
+        if (btn) {
+          if (promptDiferido) {
+            promptDiferido.prompt();
+            promptDiferido.userChoice.then(function (res) {
+              if (res && res.outcome === 'accepted') {
+                window.__marcarAppInstalada();
+              } else {
+                try { localStorage.setItem('ocean-instalar-omitido', 'si'); } catch (e) {}
+              }
+              promptDiferido = null;
+              cerrarVeloInstalar();
+            }).catch(function () { cerrarVeloInstalar(); });
+          } else {
+            // Navegadores sin beforeinstallprompt (iOS/Safari): instrucciones.
+            var tarjeta = document.querySelector('.tarjeta-instalar');
+            if (tarjeta) {
+              tarjeta.innerHTML =
+                '<img src="assets/logo-ocean-mark-white.svg" alt="" class="w-[48px] h-[48px] mx-auto mb-3 drop-shadow-lg" />' +
+                '<h2 class="marca-titulo text-[15px] tracking-[0.16em] mb-3">Instalar</h2>' +
+                '<p class="text-[11.5px] leading-relaxed text-white/75 mb-4">' +
+                  'En iPhone/iPad: toca <strong>Compartir</strong> y elige <strong>Añadir a pantalla de inicio</strong>.<br><br>' +
+                  'En Android/Chrome: abre el menú <strong>⋮</strong> y elige <strong>Instalar aplicación</strong>.' +
+                '</p>' +
+                '<button id="btn-omitir-instalar" class="boton-omitir" type="button" style="margin-top:0">Entendido</button>';
+            }
+          }
+        }
+
+        if (omitir) {
+          try { localStorage.setItem('ocean-instalar-omitido', 'si'); } catch (e) {}
+          cerrarVeloInstalar();
+        }
+      });
+
+      // 7) Respaldo: si el navegador no dispara beforeinstallprompt (iOS), se ofrece igual.
+      window.addEventListener('load', function () {
+        setTimeout(function () {
+          if (promptDiferido) return; // ya hay prompt nativo disponible
+          mostrarVeloInstalar();
+        }, 1200);
+      });
+
   </script>
 </body>
 </html>
