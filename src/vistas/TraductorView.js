@@ -296,6 +296,14 @@ const moduloAnimacionesYEstilos = {
         line-height: 1;
       }
 
+      /* Líneas ornamentales a ambos lados de la firma */
+      .linea-firma {
+        height: 1px; width: 22px; flex: 0 0 auto;
+        background: linear-gradient(90deg, transparent, rgba(79, 195, 232, 0.85));
+        box-shadow: 0 0 5px rgba(79, 195, 232, 0.45);
+      }
+      .linea-firma:last-child { transform: scaleX(-1); }
+
       .indicador-turno {
         display: inline-flex; align-items: center; gap: 5px;
         font-size: 7.5px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
@@ -376,10 +384,11 @@ const moduloPlantillasInterfaz = {
             </div>
           </div>
 
-          <!-- Firma del autor, bajo la marca y alineada a la derecha -->
-          <div class="flex items-center justify-end gap-1.5 w-full mt-[2px]">
-            <span class="h-[1px] w-4 bg-gradient-to-r from-transparent to-[#4FC3E8]/50"></span>
+          <!-- Firma del autor, centrada bajo Intérprete -->
+          <div class="flex items-center justify-center gap-2 w-full mt-[6px]">
+            <span class="linea-firma"></span>
             <span class="credito-autor">By Ricardo Nájera</span>
+            <span class="linea-firma"></span>
           </div>
 
         </div>

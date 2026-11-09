@@ -28,6 +28,54 @@
     <div id="mobile-container" class="w-full max-w-md h-full relative overflow-hidden flex flex-col"></div>
   </div>
   <script type="module" src="src/app.js"></script>
+  <script>
+    /* PWA: registro del service worker + control del aviso de instalación */
+    (function () {
+      // 1) Registro del service worker (habilita instalación y modo offline)
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('sw.js').catch(function () {});
+        });
+      }
+
+      // 2) Si la app YA corre instalada (standalone), se marca y no se muestra nada.
+      var yaInstalada =
+        window.matchMedia('(display-mode: standalone)').matches ||
+        window.matchMedia('(display-mode: fullscreen)').matches ||
+        window.matchMedia('(display-mode: minimal-ui)').matches ||
+        window.navigator.standalone === true;
+
+      function marcarInstalada() {
+        document.documentElement.setAttribute('data-app-instalada', 'si');
+        document.querySelectorAll('[data-instalar-app]').forEach(function (el) {
+          el.style.display = 'none';
+          el.setAttribute('hidden', '');
+          el.remove();
+        });
+      }
+
+      if (yaInstalada) marcarInstalada();
+
+      // 3) Una vez instalada (o al cambiar a standalone), se retira el botón para siempre.
+      window.matchMedia('(display-mode: standalone)').addEventListener('change', function (ev) {
+        if (ev.matches) marcarInstalada();
+      });
+
+      // 4) Recordar la instalación: tras instalarse, no se vuelve a ofrecer.
+      if (localStorage.getItem('ocean-app-instalada') === 'si') marcarInstalada();
+
+      window.addEventListener('appinstalled', function () {
+        try { localStorage.setItem('ocean-app-instalada', 'si'); } catch (e) {}
+        marcarInstalada();
+      });
+
+      // 5) Expón para que el botón se oculte solo cuando el evento de instalación se consume.
+      window.__marcarAppInstalada = function () {
+        try { localStorage.setItem('ocean-app-instalada', 'si'); } catch (e) {}
+        marcarInstalada();
+      };
+    })();
+  </script>
 </body>
 </html>
 
