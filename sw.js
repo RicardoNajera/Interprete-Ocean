@@ -1,5 +1,5 @@
 /* Service Worker - Interprete Ocean Allure: app instalable y offline */
-const CACHE = 'ocean-interprete-v3';
+const CACHE = 'ocean-interprete-v4';
 const ACTIVOS = [
   './', './index.html', './estilos.css', './manifest.json', './sw.js',
   './src/app.js',
@@ -12,7 +12,7 @@ const ACTIVOS = [
   './assets/logo-ocean-mark.svg',
   './assets/favicon.svg',
   './assets/icon-app-192.png',
-  './assets/icon-app-512.png'
+  './assets/icon-app-512.png', './assets/icon-maskable-192.png', './assets/icon-maskable-512.png', './assets/icon-apple-180.png'
 ];
 
 self.addEventListener('install', (e) => {
